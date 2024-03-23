@@ -5,7 +5,7 @@ FreddyサービスLP
 - 自社サービスのLPを自分で0から書いてみました
 
 ## ③DEMO
-- 
+- https://reonaohmine.github.io/kadai06_js/
 
 ## ④工夫した点・こだわった点
 - 0から書き上げてHTML,CSSの復習ができました
