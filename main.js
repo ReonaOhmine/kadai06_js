@@ -121,41 +121,51 @@ function pushChoice(e) {
 
 
   // ユーザーの選択に応じて、次のロボットの応答を生成するために、robotOutput()関数が呼び出されます。
-
   robotOutput();
-  // 最後に、userData配列がコンソールにログ出力されます。
 
+  // 最後に、userData配列がコンソールにログ出力されます。
   console.log(userData);
 }
 
 // 拡大ボタン
+// チャットボットの拡大状態を管理するための変数です。
+// 初期値は 'none' に設定されています。
 let chatbotZoomState = 'none';
+
+// document.getElementById() を使用して、拡大機能に関連する要素を取得しています。
+// chatbotはチャットボット全体を表す要素です。
 const chatbot = document.getElementById('chatbot');
+// chatbotBodyはチャットボットの本文部分を表す要素です。
 const chatbotBody = document.getElementById('chatbot-body');
+// chatbotFooterはチャットボットのフッター部分を表す要素です。
 const chatbotFooter = document.getElementById('chatbot-footer');
+// chatbotZoomIconはチャットボットの拡大アイコンを表す要素です。
 const chatbotZoomIcon = document.getElementById('chatbot-zoom-icon');
 
 
 // --------------------ロボットの投稿--------------------
+//   //   robotOutput() 関数:ロボットがメッセージを投稿するための関数です。
+// メッセージが投稿されるときに呼び出されます。
 function robotOutput() {
-  // 相手の返信が終わるまで、その間は返信不可にする
-  // なぜなら、自分の返信を複数受け取ったことになり、その全てに返信してきてしまうから
-  // 例："Hi!〇〇!"を複数など
 
   robotCount++;
   console.log('robotCount：' + robotCount);
-
+  // 相手の返信を待機する間の処理:相手の返信が終わるまで、自分の投稿を制御するために chatSubmitBtn.disabled = true; を使用して送信ボタンを無効にします。
   chatSubmitBtn.disabled = true;
 
+  // 投稿要素の作成:メッセージを表示するために、ul要素にli要素を追加し、左寄せのスタイルを適用します。
   // ulとliを作り、左寄せのスタイルを適用し投稿する
   const ul = document.getElementById('chatbot-ul');
   const li = document.createElement('li');
   li.classList.add('left');
   ul.appendChild(li);
 
-  // 考え中アニメーションここから
+  // 考え中アニメーション:
+  // ロボットが応答を生成している間に、ユーザーに待機中であることを示すアニメーションが表示されます。
+  // robotLoadingDiv 要素が作成され、適切なクラスが追加されます。
   const robotLoadingDiv = document.createElement('div');
 
+  // setTimeout() を使用して、一定時間（ここでは 800 ミリ秒）後に考え中アニメーションが表示されるようにしています。
   setTimeout(() => {
     li.appendChild(robotLoadingDiv);
     robotLoadingDiv.classList.add('chatbot-left');
@@ -163,15 +173,28 @@ function robotOutput() {
     console.log('考え中');
     // 考え中アニメーションここまで
 
-    // 一番下までスクロール
+    // 一番下までスクロール:
+    // chatToBottom() 関数が呼び出され、チャットボットの画面を一番下までスクロールします。
+
     chatToBottom();
   }, 800);
 
+
+
+
+
   setTimeout(() => {
 
-    // 考え中アニメーション削除
+
+    // 考え中アニメーション削除:
+    // robotLoadingDiv 要素（考え中のアニメーション）が削除されます。これにより、待機中のアニメーションが消えて、次の処理に移行します。
     robotLoadingDiv.remove();
 
+
+
+    // 選択肢の表示:
+    // chatList[robotCount].option が 'choices' の場合、選択肢が表示されます。
+    // choiceField 要素が作成され、適切なクラスが追加されます。
     if (chatList[robotCount].option === 'choices') {
       const qAnswer = `q-${robotCount}-${chatList[robotCount].text.answer}`;
       const choiceField = document.createElement('div');
@@ -180,6 +203,7 @@ function robotOutput() {
       li.appendChild(choiceField);
 
       // 質問タイトル
+      // 質問タイトルと質問文が作成され、それぞれの内容が表示されます。
       const choiceTitle = document.createElement('div');
       choiceTitle.classList.add('choice-title');
       choiceTitle.textContent = chatList[robotCount].text.title;
@@ -191,6 +215,8 @@ function robotOutput() {
       choiceField.appendChild(choiceQ);
 
       // 選択肢作成
+      // 選択肢がボタンとして作成され、それぞれのテキストが表示されます。
+      // 各選択肢のボタンには、クリックした際に pushChoice() 関数が呼び出されるようにイベントが設定されます。
       for (let i = 0; i < chatList[robotCount].text.choices.length; i++) {
         const choiceButton = document.createElement('button');
         choiceButton.id = `${choiceField.id}-${i}`; // id設定
@@ -372,8 +398,6 @@ function repeatRobotOutput() {
     });
   }
 }
-
-
 
 
 // PC用の拡大縮小機能
